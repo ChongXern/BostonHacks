@@ -6,8 +6,16 @@ from flask import Flask
 
 db = SQLAlchemy()
 
+class User(db.Model):
+    __tablename__ = 'users'
+    id = db.Column(db.Integer, primary_key=True)
+    age = db.Column(db.Integer, nullable=False)
+    weight = db.Column(db.Float, nullable=False)
+    height = db.Column(db.Float, nullable=False)
+    gender = db.Column(db.String(10), nullable=False)
+    activity_time = db.Column(db.Integer, nullable=False)
+    
 def create_app(test_config=None):
-    # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
     
     app.config['SECRET_KEY'] = 'dev'
@@ -16,13 +24,7 @@ def create_app(test_config=None):
     
     db.init_app(app)
     
-    try:
-        os.makedirs(app.instance_path)
-    except OSError:
-        pass
-    
     with app.app_context():
-        db.create_all()
-
+        db.create_all()  # Creates the tables
+    
     return app
-

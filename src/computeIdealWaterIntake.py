@@ -1,3 +1,5 @@
+# Import db and User model
+from backend import db, User, create_app
 import math
 
 recyclingRate = 0.98  # 98% of pee becomes water
@@ -7,6 +9,10 @@ peeOutputRate = 0.6
 totalWaterConsumed = 0
 isHydrated = 1
 
+
+app = create_app()
+
+
 # for terminal use
 def inputUserData():
     age = int(input("Age: "))
@@ -15,7 +21,15 @@ def inputUserData():
     gender = input("Gender: ")
     activityTime = int(input("Activity time: "))  # minutes
     
+    # Create a new User instance and add it to the database
+    with app.app_context():
+        new_user = User(age=age, weight=weight, height=height, gender=gender, activity_time=activityTime)
+        db.session.add(new_user)
+        db.session.commit()
+    
+    print("User data saved to the database.")
     return age, weight, height, gender, activityTime
+
 
 def computeIdealWaterIntake(age, weight_kg, gender, activityTime):
     baseIntake = weight_kg
