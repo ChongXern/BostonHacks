@@ -52,8 +52,8 @@ def logPeeOutput(activityTime):
     totalPeeGenerated += peeOutput
     currentWaterAvailable += peeOutput * recyclingRate
     
-
 def computeTotalPouches(idealVol, pouchSize=300):
+    global isHydrated
     isHydrated ^= 1
     return (idealVol + (pouchSize - 1) * isHydrated) // pouchSize
 
