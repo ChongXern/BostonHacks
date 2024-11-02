@@ -1,17 +1,16 @@
-recyclingRate = 0.98 # 98% of piss becomes water
-currentWaterAvailable = 900000 # ml
+recyclingRate = 0.98  # 98% of pee becomes water
+currentWaterAvailable = 900000  # ml
 totalPeeGenerated = 0
 peeOutputRate = 0.6
 totalWaterConsumed = 0
 
-#for terminal use
+# for terminal use
 def inputUserData():
     age = int(input("Age: "))
     weight = float(input("Weight: "))
     height = float(input("Height: "))
     gender = input("Gender: ")
-    #activity = input("Activity: ")
-    activityTime = int(input("Activity time: ")) # minutes
+    activityTime = int(input("Activity time: "))  # minutes
     
     return age, weight, height, gender, activityTime
 
@@ -43,9 +42,9 @@ def logWaterInput(volume):
     totalWaterConsumed += volume
     currentWaterAvailable -= volume
 
-def logPeeOutput():
+def logPeeOutput(activityTime):
     global totalPeeGenerated, currentWaterAvailable
-    peeOutputPercentage = getPeeOutputPercentage()
+    peeOutputPercentage = getPeeOutputPercentage(activityTime)
     peeOutput = totalWaterConsumed * peeOutputPercentage
     totalPeeGenerated += peeOutput
     currentWaterAvailable += peeOutput * recyclingRate
@@ -53,10 +52,18 @@ def logPeeOutput():
 def main():
     age, weight, _, gender, exerciseTime = inputUserData()
     idealWaterIntake = computeIdealWaterIntake(age, weight, gender, exerciseTime)
-    print(idealWaterIntake)
-    while (currentWaterAvailable > 0):
+    print("Ideal Water Intake:", idealWaterIntake, "ml")
+    
+    while currentWaterAvailable > 0 and totalWaterConsumed < idealWaterIntake:
         logWaterInput(10)
-        logPeeOutput()
+        logPeeOutput(exerciseTime)
+
+        if totalWaterConsumed >= idealWaterIntake:
+            break
+
+    print("Total Water Consumed:", totalWaterConsumed, "ml")
+    print("Total Pee Generated:", totalPeeGenerated, "ml")
+    print("Current Water Available:", currentWaterAvailable, "ml")
 
 if __name__ == '__main__':
     main()
