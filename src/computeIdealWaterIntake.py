@@ -1,8 +1,11 @@
+import math
+
 recyclingRate = 0.98  # 98% of pee becomes water
 currentWaterAvailable = 900000  # ml
 totalPeeGenerated = 0
 peeOutputRate = 0.6
 totalWaterConsumed = 0
+isHydrated = 1
 
 # for terminal use
 def inputUserData():
@@ -48,13 +51,27 @@ def logPeeOutput(activityTime):
     peeOutput = totalWaterConsumed * peeOutputPercentage
     totalPeeGenerated += peeOutput
     currentWaterAvailable += peeOutput * recyclingRate
+    
+
+def computeTotalPouches(idealVol, pouchSize=300):
+    isHydrated ^= 1
+    return (idealVol + (pouchSize - 1) * isHydrated) // pouchSize
+
+def computeHourIntervalToDrink(idealVol, sleepHours=6, pouchSize=300):
+    totalPouches = idealVol // pouchSize
+    return max(1, (24 - sleepHours + totalPouches - 1) // totalPouches)
 
 def main():
     age, weight, _, gender, exerciseTime = inputUserData()
     idealWaterIntake = computeIdealWaterIntake(age, weight, gender, exerciseTime)
     print("Ideal Water Intake:", idealWaterIntake, "ml")
     
-    while currentWaterAvailable > 0 and totalWaterConsumed < idealWaterIntake:
+    hourInterval = computeHourIntervalToDrink(idealVol=idealWaterIntake)
+    totalPouches = computeTotalPouches(idealVol=idealWaterIntake)
+    print(f"hourInterval is {hourInterval} for {totalPouches}")
+    print(totalPouches * 300 - idealWaterIntake)
+    
+    '''while currentWaterAvailable > 0 and totalWaterConsumed < idealWaterIntake:
         logWaterInput(10)
         logPeeOutput(exerciseTime)
 
@@ -63,7 +80,7 @@ def main():
 
     print("Total Water Consumed:", totalWaterConsumed, "ml")
     print("Total Pee Generated:", totalPeeGenerated, "ml")
-    print("Current Water Available:", currentWaterAvailable, "ml")
+    print("Current Water Available:", currentWaterAvailable, "ml")'''
 
 if __name__ == '__main__':
     main()
