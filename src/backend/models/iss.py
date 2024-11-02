@@ -8,7 +8,7 @@ class Iss(db.Model):
 
     totalWaterAmt = db.Column(db.Integer, nullable=False)
     totalAstronauts = db.Column(db.Integer, nullable=False)
-    stationName = db.Column(db.String(100), nullable=False)  # Adjust length as needed
+    stationName = db.Column(db.String(100), nullable=False)  #Adjust length as needed
 
     def __repr__(self):
         return f'<ISS ID: {self.id}>'
