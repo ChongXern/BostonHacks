@@ -129,3 +129,16 @@ def take_a_piss(astronaut_id):
         "new_currPissAmt": astronaut_record.currPissAmt,
         "pee_log": issStation.pee_log
     }), 200
+
+@app.route('/astronaut/<int:astronaut_id>/next_pee_time', methods=['GET'])
+def get_next_piss_time(astronaut_id):
+    astronaut = Astronaut.query.get_or_404(astronaut_id)
+    
+    current_time = datetime.now()
+    next_piss_time = current_time + timedelta(hours=2)
+    
+    return jsonify({
+        "astronaut_id": astronaut_id,
+        "next_piss_time": next_piss_time.isoformat()
+    }), 200
+
