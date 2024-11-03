@@ -1,6 +1,6 @@
 # Import db and User model
-from backend import db, User, create_app
-from backend import Astronaut, Iss
+from backend.extensions import db  # Use full path to locate extensions
+from backend import User, create_app
 import math
 
 recyclingRate = 0.98  # 98% of pee becomes water
@@ -76,8 +76,7 @@ def computeHourIntervalToDrink(idealVol, sleepHours=6, pouchSize=300):
     totalPouches = idealVol // pouchSize
     return max(1, (24 - sleepHours + totalPouches - 1) // totalPouches)
 
-def computeWaterIntakeTopDown(currentWaterAvailable, totalAstronauts, totalDays):
-    
+#def computeWaterIntakeTopDown(currentWaterAvailable, totalAstronauts, totalDays):
 
 def computeChangesAfterDay():
     global totalDays

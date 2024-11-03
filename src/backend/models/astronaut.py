@@ -1,6 +1,7 @@
-from __init__ import db
+from extensions import db
 import datetime
 import models
+#from water import Water
 
 class Astronaut(db.Model):
     __tablename__ = 'astronaut'

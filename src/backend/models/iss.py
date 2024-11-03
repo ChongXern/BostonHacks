@@ -3,7 +3,7 @@ import datetime
 import models
 
 class Iss(db.Model):
-    __tablename__ = 'iss'
+    __tablename__ = 'iss_stations'  # Your table name
     id = db.Column(db.Integer, primary_key=True)
 
     totalWaterAmt = db.Column(db.Integer, nullable=False)

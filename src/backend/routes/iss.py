@@ -1,9 +1,14 @@
 from flask import Flask, jsonify, request, abort
 from models import Iss
 from __init__ import *
+from flask_cors import CORS  # Import CORS
 
 app = create_app()
 
+# Enable CORS
+CORS(app)  # Initialize CORS
+
+'''
 #POST - Create Station
 @app.route('/iss', methods=['POST'])
 def create_station():
@@ -93,3 +98,4 @@ def consume_water(station_id):
         'totalWaterAmt': station.totalWaterAmt,
         'stationName': station.stationName
     }), 200
+'''
