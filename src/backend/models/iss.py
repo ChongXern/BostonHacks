@@ -8,12 +8,14 @@ class Iss(db.Model):
 
     totalWaterAmt = db.Column(db.Integer, nullable=False)
     totalAstronauts = db.Column(db.Integer, nullable=False)
-    stationName = db.Column(db.String(100), nullable=False)  #Adjust length as needed
+    stationName = db.Column(db.String(100), nullable=False) #Adjust length as needed
+    missionDuration = db.Column(db.Integer, nullable=False)
 
     def __repr__(self):
         return f'<ISS ID: {self.id}>'
-    
-    def __init__(self, totalWaterAmt=900000, totalAstronauts=5, stationName="Default Station"):
+
+    def __init__(self, totalWaterAmt=900000, totalAstronauts=5, stationName="Default Station", missionDuration=180):
         self.totalWaterAmt = totalWaterAmt
         self.totalAstronauts = totalAstronauts
         self.stationName = stationName
+        self.missionDuration = missionDuration

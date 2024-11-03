@@ -1,7 +1,6 @@
 from __init__ import db
 import datetime
 import models
-from water import Water
 
 class Astronaut(db.Model):
     __tablename__ = 'astronaut'
@@ -13,16 +12,19 @@ class Astronaut(db.Model):
     height = db.Column(db.Float, nullable=False)
     age = db.Column(db.Integer, nullable=False)
     gender = db.Column(db.String(10), nullable=False)
+    exerciseTime = db.Column(db.Integer, nullable=False) #in minutes
+    currWaterAmt = db.Column(db.Integer, nullable=False)
     
-    water = db.relationship(Water, back_populates='author') #fix l8r
+    #water = db.relationship(Water, back_populates='author') #fix l8r
     
     def __repr__(self):
         return f'<Astronaut name: {self.name}>'
     
-    def __init__(self, name="John Doe", dob=datetime.date.today(), weight=70, height=160, age=40, gender="male"):
+    def __init__(self, name="John Doe", dob=datetime.date.today(), weight=70, height=160, age=40, gender="male", currWaterAmt=350):
         self.name = name
         self.dob = dob
         self.weight = weight
         self.height = height
         self.age = age
         self.gender = gender
+        self.currWaterAmt = currWaterAmt

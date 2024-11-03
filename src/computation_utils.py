@@ -1,5 +1,6 @@
 # Import db and User model
 from backend import db, User, create_app
+from backend import Astronaut, Iss
 import math
 
 recyclingRate = 0.98  # 98% of pee becomes water
@@ -8,45 +9,44 @@ totalPeeGenerated = 0
 peeOutputRate = 0.6
 totalWaterConsumed = 0
 isHydrated = 1
-
+totalDays = 180
+totalAstronauts = 5
 
 app = create_app()
 
-
 # for terminal use
 def inputUserData():
-    age = int(input("Age: "))
+    name = input("Name: ")
     weight = float(input("Weight: "))
     height = float(input("Height: "))
+    age = int(input("Age: "))
     gender = input("Gender: ")
     activityTime = int(input("Activity time: "))  # minutes
     
-    # Create a new User instance and add it to the database
     with app.app_context():
-        new_user = User(age=age, weight=weight, height=height, gender=gender, activity_time=activityTime)
-        db.session.add(new_user)
+        new_astronaut = Astronaut(name=name, age=age, weight=weight, height=height, gender=gender, exerciseTime=activityTime)
+        db.session.add(new_astronaut)
         db.session.commit()
     
     print("User data saved to the database.")
     return age, weight, height, gender, activityTime
 
 
-def computeIdealWaterIntake(age, weight_kg, gender, activityTime):
-    baseIntake = weight_kg
-    if gender == "male": 
+def computeIdealWaterIntake(astronaut: Astronaut):
+    baseIntake = astronaut.weight
+    if astronaut.gender.lower() == "male":
         baseIntake *= 35
-    else: 
+    else:
         baseIntake *= 31
-
-    if age > 50: 
+    if astronaut.age > 50:
         baseIntake *= 0.95
     
-    if activityTime >= 30: 
-        baseIntake += (activityTime / 30) * 350
+    #exercising
+    baseIntake += (astronaut.exerciseTime / 30) * 300
 
     return baseIntake
 
-def getPeeOutputPercentage(activityTime):
+def getPissOutputPercentage(activityTime):
     if activityTime < 30:
         return 0.7
     if activityTime < 120:
@@ -54,8 +54,9 @@ def getPeeOutputPercentage(activityTime):
     else: 
         return 0.5
 
-def logWaterInput(volume):
+def logWaterInput(iss: Iss, astronaut: Astronaut):
     global totalWaterConsumed, currentWaterAvailable
+    astronaut.
     totalWaterConsumed += volume
     currentWaterAvailable -= volume
 
@@ -75,26 +76,10 @@ def computeHourIntervalToDrink(idealVol, sleepHours=6, pouchSize=300):
     totalPouches = idealVol // pouchSize
     return max(1, (24 - sleepHours + totalPouches - 1) // totalPouches)
 
-def main():
-    age, weight, _, gender, exerciseTime = inputUserData()
-    idealWaterIntake = computeIdealWaterIntake(age, weight, gender, exerciseTime)
-    print("Ideal Water Intake:", idealWaterIntake, "ml")
+def computeWaterIntakeTopDown(currentWaterAvailable, totalAstronauts, totalDays):
     
-    hourInterval = computeHourIntervalToDrink(idealVol=idealWaterIntake)
-    totalPouches = computeTotalPouches(idealVol=idealWaterIntake)
-    print(f"hourInterval is {hourInterval} for {totalPouches}")
-    print(totalPouches * 300 - idealWaterIntake)
-    
-    '''while currentWaterAvailable > 0 and totalWaterConsumed < idealWaterIntake:
-        logWaterInput(10)
-        logPeeOutput(exerciseTime)
 
-        if totalWaterConsumed >= idealWaterIntake:
-            break
-
-    print("Total Water Consumed:", totalWaterConsumed, "ml")
-    print("Total Pee Generated:", totalPeeGenerated, "ml")
-    print("Current Water Available:", currentWaterAvailable, "ml")'''
-
-if __name__ == '__main__':
-    main()
+def computeChangesAfterDay():
+    global totalDays
+    totalDays += 1
+    # re-ration water supply

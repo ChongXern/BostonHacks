@@ -4,6 +4,10 @@ import datetime
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask
 
+from models.astronaut import Astronaut
+from models.iss import Iss
+from models.water import Water
+
 db = SQLAlchemy()
 
 class User(db.Model):
