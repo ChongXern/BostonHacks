@@ -9,7 +9,7 @@ from models.astronaut import Astronaut  # Ensure that Astronaut is defined in mo
 
 from models.astronaut import Astronaut
 from models.iss import Iss
-from models.water import Water
+#from models.water import Water
 
 db = SQLAlchemy()
 
