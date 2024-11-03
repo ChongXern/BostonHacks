@@ -6,7 +6,7 @@ import math
 recyclingRate = 0.98  # 98% of pee becomes water
 currentWaterAvailable = 900000  # ml
 totalPeeGenerated = 0
-peeOutputRate = 0.6
+PissOutputRate = 0.6
 totalWaterConsumed = 0
 isHydrated = 1
 totalDays = 180
@@ -54,18 +54,18 @@ def getPissOutputPercentage(activityTime):
     else: 
         return 0.5
 
-def logWaterInput(iss: Iss, astronaut: Astronaut):
-    global totalWaterConsumed, currentWaterAvailable
-    astronaut.
-    totalWaterConsumed += volume
-    currentWaterAvailable -= volume
+def logWaterInput(iss: Iss, astronaut: Astronaut, volume):
+    #global totalWaterConsumed, currentWaterAvailable
+    astronaut.currWaterAmt += volume
+    iss.totalWaterAmt += volume
+    # totalWaterConsumed += volume
+    # currentWaterAvailable -= volume
 
-def logPeeOutput(activityTime):
-    global totalPeeGenerated, currentWaterAvailable
-    peeOutputPercentage = getPeeOutputPercentage(activityTime)
-    peeOutput = totalWaterConsumed * peeOutputPercentage
-    totalPeeGenerated += peeOutput
-    currentWaterAvailable += peeOutput * recyclingRate
+def logPissOutput(activityTime, recyclingRate=0.8):
+    #global totalPeeGenerated, currentWaterAvailable
+    PissOutput = totalWaterConsumed * getPissOutputPercentage(activityTime)
+    totalPeeGenerated += PissOutput
+    currentWaterAvailable += PissOutput * recyclingRate
     
 def computeTotalPouches(idealVol, pouchSize=300):
     global isHydrated

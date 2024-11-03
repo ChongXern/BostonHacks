@@ -41,7 +41,8 @@ def get_astronaut(astronaut_id):
         'height': astronaut.height,
         'age': astronaut.age,
         'gender': astronaut.gender,
-        'currWaterAmt': astronaut.currWaterAmt
+        'currWaterAmt': astronaut.currWaterAmt,
+        'currPissAmt': astronaut.currPissAmt
     })
     #return jsonify({'id': astronaut.id, 'name': astronaut.name, 'weight': astronaut.weight})
 
@@ -63,6 +64,8 @@ def update_astronaut(astronaut_id):
         astronaut.gender = data['gender']
     if 'currWaterAmt' in data:
         astronaut.currWaterAmt = data['currWaterAmt']
+    if 'currPissAmt' in data:
+        astronaut.currPissAmt = data['currPissAmt']
 
     db.session.commit()
 
@@ -73,7 +76,8 @@ def update_astronaut(astronaut_id):
         'height': astronaut.height,
         'age': astronaut.age,
         'gender': astronaut.gender,
-        'currWaterAmt': astronaut.currWaterAmt
+        'currWaterAmt': astronaut.currWaterAmt,
+        'currPissAmt': astronaut.currPissAmt
     }), 200
 
 @app.route('/astronaut/<int:astronaut_id>/drink', methods=['POST'])
@@ -81,22 +85,46 @@ def drink_water(astronaut_id):
     data = request.get_json()
     amount_drunk = data.get('amount', 0)
 
-    water_record = Water.query.filter_by(personId=astronaut_id).first()
-    iss_station = Iss.query.first() 
+    water_record = Astronaut.query.filter_by(id=astronaut_id).first()
+    issStation = Iss.query.first() 
 
-    if not water_record or not iss_station:
-        abort(404, "Water record or ISS station not found.")
+    if not water_record or not issStation:
+        abort(404, "Astronaut or ISS station not found.")
 
-    if water_record.currWaterAmt < amount_drunk or iss_station.totalWaterAmt < amount_drunk:
-        return jsonify({"message": "Not enough water available"}), 400
+    if water_record.currWaterAmt < amount_drunk:
+        return jsonify({"message": "Not enough water available for this astronaut"}), 400
+
+    if issStation.totalWaterAmt < amount_drunk:
+        return jsonify({"message": "Not enough water available in ISS"}), 400
 
     water_record.currWaterAmt -= amount_drunk
-    iss_station.totalWaterAmt -= amount_drunk
+    issStation.totalWaterAmt -= amount_drunk
+    db.session.commit()
+    
+    return jsonify({
+        "astronaut_id": astronaut_id,
+        "new_currWaterAmt": water_record.currWaterAmt,
+        "new_totalWaterAmt": issStation.totalWaterAmt,
+    }), 200
 
+@app.route('/astronaut/<int:astronaut_id>/piss', methods=['POST'])
+def take_a_piss(astronaut_id):
+    data = request.get_json()
+    pissAmt = data.get('amount', 0)
+    
+    astronaut_record = Astronaut.query.filter_by(id=astronaut_id).first()
+    issStation = Iss.query.first()
+    
+    if not astronaut_record or not issStation:
+        abort(404, "Astronaut or ISS station not found.")
+    
+    astronaut_record.currPissAmt += pissAmt
+    issStation.pee_log.append({"amount": pissAmt, "timestamp": datetime.now()})
+    
     db.session.commit()
 
     return jsonify({
         "astronaut_id": astronaut_id,
-        "new_currWaterAmt": water_record.currWaterAmt,
-        "new_totalWaterAmt": iss_station.totalWaterAmt,
+        "new_currPissAmt": astronaut_record.currPissAmt,
+        "pee_log": issStation.pee_log
     }), 200

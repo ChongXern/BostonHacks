@@ -14,13 +14,14 @@ class Astronaut(db.Model):
     gender = db.Column(db.String(10), nullable=False)
     exerciseTime = db.Column(db.Integer, nullable=False) #in minutes
     currWaterAmt = db.Column(db.Integer, nullable=False)
+    currPissAmt = db.Column(db.Integer, nullable=False)
     
     #water = db.relationship(Water, back_populates='author') #fix l8r
     
     def __repr__(self):
         return f'<Astronaut name: {self.name}>'
     
-    def __init__(self, name="John Doe", dob=datetime.date.today(), weight=70, height=160, age=40, gender="male", currWaterAmt=350):
+    def __init__(self, name="John Doe", dob=datetime.date.today(), weight=70, height=160, age=40, gender="male", currWaterAmt=350, currPissAmt=0):
         self.name = name
         self.dob = dob
         self.weight = weight
@@ -28,3 +29,4 @@ class Astronaut(db.Model):
         self.age = age
         self.gender = gender
         self.currWaterAmt = currWaterAmt
+        self.currPissAmt = currPissAmt
