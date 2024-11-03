@@ -1,7 +1,7 @@
-from __init__ import db
+from extensions import db
 import datetime
 import models
-from water import Water
+#from water import Water
 
 class Astronaut(db.Model):
     __tablename__ = 'astronaut'
@@ -14,7 +14,7 @@ class Astronaut(db.Model):
     age = db.Column(db.Integer, nullable=False)
     gender = db.Column(db.String(10), nullable=False)
     
-    water = db.relationship(Water, back_populates='author') #fix l8r
+    #water = db.relationship(Water, back_populates='author') #fix l8r
     
     def __repr__(self):
         return f'<Astronaut name: {self.name}>'

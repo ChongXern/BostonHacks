@@ -4,6 +4,7 @@ from __init__ import *
 
 app = create_app()
 
+
 #POST - Create Astronaut
 @app.route('/astronauts', methods=['POST'])
 def create_astronaut():

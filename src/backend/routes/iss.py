@@ -1,9 +1,14 @@
 from flask import Flask, jsonify, request, abort
 from models import Iss
 from __init__ import *
+from flask_cors import CORS  # Import CORS
 
 app = create_app()
 
+# Enable CORS
+CORS(app)  # Initialize CORS
+
+'''
 #POST - Create Station
 @app.route('/iss', methods=['POST'])
 def create_station():
@@ -37,4 +42,4 @@ def delete_station(station_id):
     db.session.delete(station)
     db.session.commit()
     return jsonify({'message': 'ISS Station deleted successfully'}), 200
-
+'''
